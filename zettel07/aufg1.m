@@ -1,22 +1,26 @@
 data = importdata('/home/alex/fu_mustererkennung_sose2015/zettel07/fieldgoal.txt');
-
+[h,w] = size(data);
 b = [0;0];
-
 
 function e = error(data,beta)
   [h,w] = size(data);
   e = 0;
   for i = 1:h
     x = data(i,1);
-    y = data(i,2);
+    y = data(i,2)
     extendedX = [1;x];
-    expected = p(extendedX,beta);
+    expected = p(extendedX,beta)
     e += abs(y - expected);
   endfor
 endfunction
 
 function w = p(x,b)
-   w =(e^(transpose(b)*x))/(1+(e^(transpose(b)*x)));
+   w = 1 - 1/(1+exp(transpose(b)*x));
+endfunction
+
+function b = lBeta(x,y, beta)
+  extendedX = [1;x];
+  b = extendedX * (y - p(extendedX ,beta));
 endfunction
 
 function l = nambla(beta, data)
@@ -25,17 +29,17 @@ function l = nambla(beta, data)
   for i = 1:h
     x = data(i,1);
     y = data(i,2);
-    extendedX = [1;x];
-    l += extendedX * (y - p(extendedX,beta));
+    beta = lBeta(x,y,beta);
   endfor
 endfunction
 
-error(data,b)
-
-alpha = 10^(-7);
-for i = 1:250
-  b = b - alpha*nambla(b,data);
-  alpha = alpha * 2;
+for k = 1:100
+  bb = b;
+  for i = 1:h
+    x = data(i,1);
+    y = data(i,2);
+    b += lBeta(x,y,bb);
+  endfor
+  error(data,b);
 endfor
-error(data,b)
 
