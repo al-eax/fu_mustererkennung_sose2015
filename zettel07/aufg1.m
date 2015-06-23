@@ -6,14 +6,14 @@ function e = error(beta,data)
   for i = 1:h
     x = data(i,1);
     y = data(i,2);
-    extendedX = [1;x];
-    expected = p(extendedX,beta);
+    expected = p(x,beta);
     e += abs(y - expected);
   endfor
 endfunction
 
 function w = p(x,b)
-   w = 1 - 1/(1+exp(transpose(b)*x));
+   extendedX = [1;x];
+   w = 1 - 1/(1+exp(transpose(b)*extendedX));
 endfunction
 
 function b = lBeta(beta,data)
@@ -22,8 +22,8 @@ function b = lBeta(beta,data)
   for i = 1:h
     x = data(i,1);
     y = data(i,2);
-    extendedX = [1;x];
-    b += extendedX*(y- p(extendedX,beta));
+    
+    b += x*(y- p(x,beta));
   endfor
 endfunction
 
@@ -32,11 +32,26 @@ function b = nextB(beta, data)
   b = beta + a * lBeta(beta,data);
 endfunction
 
+
+function plotResult(beta,data)
+  [h,w] = size(data);
+  %plot all training data
+  for i = 1:h
+    x = data(i,1);
+    y = data(i,2); 
+    plot(x,y,"r."); hold on;
+    i
+  endfor
+  for k = 1:100
+    plot(k, p(k,beta),"b."); hold on;
+  endfor
+endfunction
+
 [h,w] = size(data);
 b = [0;0];
 
 for k = 1:100
   b = nextB(b,data);
-  error(b,data)
+  error(b,data);
 endfor
-
+plotResult(b,data);
