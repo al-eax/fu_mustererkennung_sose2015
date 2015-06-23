@@ -31,22 +31,29 @@ function b = nextB(beta, data)
   b = beta + a * lBeta(beta,data);
 endfunction
 
-function plotResult(beta,data)
+function plotResult(beta,data,c)
   [h,w] = size(data);
   for k = 1:100
-    plot(k, p(k,beta),"b"); hold on;
+    plot(k, p(k,beta),c); hold on;
   endfor
 endfunction
 
 [h,w] = size(data);
 b = [0;0];
 
-for k = 1:100000
+for k = 1:1000
   b = nextB(b,data);
-  if k == 25000 || k == 50000 || k == 75000 || k == 100000
-    figure;
+  if k == 250
     fprintf("k = %d, beta = (%f,%f) error = %f\n",k,b(1,1),b(2,1), error(b,data));
-    plotResult(b,data);
+    plotResult(b,data,"r");
+  elseif k == 500
+    fprintf("k = %d, beta = (%f,%f) error = %f\n",k,b(1,1),b(2,1), error(b,data));
+    plotResult(b,data,"g");
+  elseif k == 750
+    fprintf("k = %d, beta = (%f,%f) error = %f\n",k,b(1,1),b(2,1), error(b,data));
+    plotResult(b,data,"b");
+  elseif k == 1000
+    fprintf("k = %d, beta = (%f,%f) error = %f\n",k,b(1,1),b(2,1), error(b,data));
+    plotResult(b,data,"k");
   endif
 endfor
-
