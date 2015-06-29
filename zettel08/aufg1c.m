@@ -32,5 +32,4 @@ for i = 1:h
   f = getBoolFunc(w1,w2,w3);
   functions(i,1) = f;
 endfor
-
-hist(functions);
+hist(functions,16);

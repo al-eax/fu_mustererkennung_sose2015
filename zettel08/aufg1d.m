@@ -18,6 +18,7 @@ endfunction
 
 n = 10000;
 rndweights = zeros(n,3);
+ff = zeros(16,1);
 functions = zeros(n,1);
 [h,w] = size(rndweights);
 
@@ -31,6 +32,15 @@ for i = 1:h
   w3 = rndweights(i,3);
   f = getBoolFunc(w1,w2,w3);
   functions(i,1) = f;
+  ff(f+1,1) += 1;
 endfor
 
-hist(functions);
+hist(functions,16);
+m = max(ff);
+for i = 1:16
+  if ff(i,1) < m && ff(i,1) > 0
+    m = ff(i,1);
+  endif
+endfor
+ff
+fprintf("min %d  max %d\n",m,max(ff));
