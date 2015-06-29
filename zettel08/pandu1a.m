@@ -19,8 +19,5 @@ for i = 1:2000
   vektor = [x;y;z];
   leng = norm(vektor);
   vektor = [x/leng,y/leng,z/leng];
-  leng = norm(vektor);
-  if (leng == 1)
     plot3(x/leng,y/leng,z/leng,'+r');hold on;
-  endif
 endfor
