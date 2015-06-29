@@ -1,6 +1,6 @@
 0;
 function e = exec1(w1,w2,w3,t1,t2)
-  if ((w1*t1 + w2*t2 + w3) > 0)
+  if ((w1*t1 + w2*t2 + w3) >= 0)
      e = 1;
    else
      e = 0;
