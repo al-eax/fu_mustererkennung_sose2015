@@ -1,21 +1,24 @@
 0;
-0;
-%macht [a,b,c] zu [a,b,c,1]
+
+% [a,b,c] -> [a,b,c,1]
 function e = add1(o)
   [h,w] = size(o);
   e = ones(h,w + 1);
   e(1,1:w) = o(1:w);  
 endfunction
 
+% sigmoide Funktion
 function s = sig(x)
   s = 1.0/(1.0  + exp(-x));
 endfunction
 
+%Erstellt zwei zufällige Matrizen
 function [W1,W2] = createRanwomW1W2(m,n,k)
   W1 = rand(n + 1,k);
   W2 = rand(k + 1,m);
 endfunction
 
+%Berechnet Diagonalmatrizen mit Ableitungen
 function [D1,D2] = createD1D2(o1,o2,m,k)
   D1 = zeros(k,k);
   l = 1;
@@ -30,6 +33,7 @@ function [D1,D2] = createD1D2(o1,o2,m,k)
   endfor
 endfunction
 
+%Neuronales Netz sagt einen Wert vorher
 function [r1,r2] = net(input, W1, W2, m, n , k)
   ot = add1(input);
   o11 = ot * W1;
@@ -78,7 +82,6 @@ for i = 1:50000
     W2 = W2 + transpose(dW2T);
 endfor
 
-
 for i = 1:lines
   currentLine = trainData(i,:);
   [o1,o2] = net(currentLine(1,1:2),W1,W2,m,n,k);
@@ -86,3 +89,5 @@ for i = 1:lines
   predicted = round(o2);
   fprintf("%d. expected %d      predicted %d\n", i , expected, predicted);
 endfor
+W1
+W2

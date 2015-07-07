@@ -6,6 +6,11 @@ function e = add1(o)
   e(1,1:w) = o(1:w);  
 endfunction
 
+function s = sig(x)
+  s = 1.0/(1.0  + exp(-x));
+endfunction
+
+
 function [W1,W2] = createRanwomW1W2(m,n,k)
   W1 = rand(n + 1,k);
   W2 = rand(k + 1,m);
@@ -49,42 +54,78 @@ endfunction
 
 function n = outputToNum(o2)
   [x,y] = max(o2);
-  n = y;
+  n = y-1;
 endfunction
+
+function n = normDigit(d)
+  points = zeros(8,2);
+  points(1,:) = d(1,1:2);
+  points(2,:) = d(1,3:4);
+  points(3,:) = d(1,5:6);
+  points(4,:) = d(1,7:8);
+  points(5,:) = d(1,9:10);
+  points(6,:) = d(1,11:12);
+  points(7,:) = d(1,13:14);
+  points(8,:) = d(1,15:16);
+  m = norm(points(1,:));
+  maxIndex = 1;
+  for i = 1: size(points,1)
+    if norm(points(i,:)) > m
+      maxIndex = i;
+      m = norm(points(i,:));
+    endif
+  endfor
+  
+  n = d / m;
+endfunction
+
 
 data = load("/home/alex/fu_mustererkennung_sose2015/zettel09/pendigits-training.txt");
 testData = load("/home/alex/fu_mustererkennung_sose2015/zettel09/pendigits-training.txt");
-lines = size(data,1);
+lines = size(data,1)
 
 n = 16; %input
 k = 2; %hiddeen units
 m = 10; %output units
 
+
+
 [W1,W2] = createRanwomW1W2(m,n,k)
+for foo = 1:4
+  for i = 1:lines
+    currentLine = data(i,:);
+    expected = currentLine(1,17);
+    input = normDigit(currentLine(1,1:16));
+    [o1,o2] = net(input,W1,W2,m,n,k);
+    [D1,D2] = createD1D2(o1,o2,m,k);
+    W22 = W2(1:k,1:m);
+    e = o2 - numToOutput(expected);
+    
+    delta2 = D2*transpose(e);
+    delta1 = D1*W22*delta2;
+    
+    dW2T = -1*delta2*add1(o1);
+    dW1T = -1*delta1*add1(input);
 
-for i = 1:100000
-  currentLine = data(mod(i,lines)+1,:);
-  expected = currentLine(1,17);
-  [o1,o2] = net(currentLine(1,1:16),W1,W2,m,n,k);
-  [D1,D2] = createD1D2(o1,o2,m,k);
-  W22 = W2(1:k,1:m);
-  e = o2 - numToOutput(expected);
-  
-  delta2 = D2*transpose(e);
-  delta1 = D1*W22*delta2;
-  
-  dW2T = -0.10*delta2*add1(o1);
-  dW1T = -0.10*delta1*add1(currentLine(1,1:16));
-
-  W1 = W1 + transpose(dW1T);
-  W2 = W2 + transpose(dW2T);
+    W1 = W1 + transpose(dW1T);
+    W2 = W2 + transpose(dW2T);
+  endfor
 endfor
 
 lines = size(testData,1);
+good = 0;
+mat = zeros(10,10);
 for i = 1:lines
   currentLine = testData(i,:);
-  [o1,o2] = net(currentLine(1,1:16),W1,W2,m,n,k);
+  [o1,o2] = net(normDigit(currentLine(1,1:16)),W1,W2,m,n,k);
   expected = currentLine(1,17);
-
-  fprintf("%d. expected %d      predicted %d\n", i , expected, outputToNum(o2));
+  
+  %fprintf("%d. expected %d      predicted %d\n", i , expected, outputToNum(o2));
+  if expected == outputToNum(o2)
+    good += 1;
+  endif
+  mat(expected+1 , outputToNum(o2)+1) += 1;
 endfor
+k
+mat
+good / lines

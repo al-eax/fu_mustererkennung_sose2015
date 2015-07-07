@@ -21,8 +21,8 @@ k = 2;
 m = 1;
 
 %TODO negative Werte zulassen
-W1 = rand(n + 1,k)
-W2 = rand(k + 1,m)
+W1 = rand(n + 1,k);
+W2 = rand(k + 1,m);
 
 function [r1,r2] = net(input, W1, W2, m, n , k)
   ot = [input(1,1) , input(1,2) , 1];
@@ -77,16 +77,17 @@ for i = 1:40000
   delta2 = D2*e;
   delta1 = D1*W22*delta2;
 
-  dW2T = -1.1*delta2*add1(o1);
-  dW1T = -1.1*delta1*add1(train(r,1:2));
+  dW2T = -0.10*delta2*add1(o1);
+  dW1T = -0.10*delta1*add1(train(r,1:2));
 
   W1 = W1 + transpose(dW1T);
   W2 = W2 + transpose(dW2T);
 endfor
-W1
-W2
+
 for i = 1:4
   [x,y] = net(train(i,:),W1,W2,m,n,k);
-  train(i,:)
-  y
+  fprintf("%d XOR %d predicted %d\n",train(i,1), train(i,2) ,round(y));  
 endfor
+fprintf("Weights\n");
+W1
+W2

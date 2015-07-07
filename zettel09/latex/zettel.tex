@@ -1,0 +1,352 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+%für quellcode
+\usepackage{listings} 
+
+\newcommand{\image}[3]{\begin{figure}[h]
+                            \includegraphics[#1]{#3}
+                            \caption{#2}
+                       \end{figure}
+                       }
+
+\lstset{
+    language = octave
+}
+%begin{lstlisting}
+
+\begin{document}
+%########################################
+%		Titel
+%########################################
+\begin{center}
+    \section*{Mustererkennung Übungszettel}
+     \today
+\end{center}
+$ $
+\newline
+\begin{tabular}{r|l l}
+    Name & Alexander Hinze-Hüttl & Kevin Pandura\\
+    Matrikelnummer & 4578322 & 4562742\\
+\end{tabular}
+\newline
+$ $
+\newline
+\newline
+%########################################
+%		Ende
+%########################################
+
+\section*{Aufgabe 1}
+
+Lassen unser Netz $50000$ mal trainieren. Als Schrittweite hat sich $-0.1$ als zuverlässig herausgestellt.\\
+
+
+Mit den Gewichtsmatrizen $\overline{W_1} =    \left(\begin{matrix}
+0.0068625 & 0.6252486\\
+0.2519384 & 0.6537852\\
+0.3643390 & 0.8197155
+\end{matrix} \right)$ , $\overline{W_2} =    \left(\begin{matrix}
+0.16418\\
+0.32411\\
+0.91243
+\end{matrix} \right)$ 
+Erhalten wir den Output:\\
+\texttt{
+1. expected 0      predicted 0\\
+2. expected 1      predicted 1\\
+3. expected 1      predicted 1\\
+4. expected 0      predicted 0
+}
+\\
+\subsection*{Code}
+\begin{lstlisting}
+0;
+% [a,b,c] -> [a,b,c,1]
+function e = add1(o)
+  [h,w] = size(o);
+  e = ones(h,w + 1);
+  e(1,1:w) = o(1:w);  
+endfunction
+
+% sigmoide Funktion
+function s = sig(x)
+  s = 1.0/(1.0  + exp(-x));
+endfunction
+
+%Erstellt zwei zufaellige Matrizen
+function [W1,W2] = createRanwomW1W2(m,n,k)
+  W1 = rand(n + 1,k);
+  W2 = rand(k + 1,m);
+endfunction
+
+%Berechnet Diagonalmatrizen mit Ableitungen
+function [D1,D2] = createD1D2(o1,o2,m,k)
+  D1 = zeros(k,k);
+  l = 1;
+  for x = 1:k
+    D1(x,x) = o1(1,x) * (1-o1(1,x));
+  endfor
+
+  D2 = zeros(m,m);
+
+  for x = 1:m
+    D2(x,x) = o2(1,x) * (1 - o2(1,x));
+  endfor
+endfunction
+
+%Neuronales Netz sagt einen Wert vorher
+function [r1,r2] = net(input, W1, W2, m, n , k)
+  ot = add1(input);
+  o11 = ot * W1;
+
+  o1 = o11;
+  for i = 1:k
+    o1(1,i) = sig(o11(1,i));
+  endfor
+  
+  o2 = add1(o1) * W2;
+  for i = 1:m
+    o2(1,i) = sig(o2(1,i));
+  endfor
+  r1 = o1;
+  r2 = o2;
+endfunction
+
+
+n = 2; %input
+k = 2; %hiddeen units
+m = 1; %output units
+
+trainData = [0,0,0;
+             1,0,1;
+             0,1,1;
+             1,1,0];
+lines = size(trainData,1);
+
+[W1,W2] = createRanwomW1W2(m,n,k)
+for i = 1:50000
+   
+    currentLine = trainData(mod(i,4)+1,:);
+    expected = currentLine(1,3);
+    [o1,o2] = net(currentLine(1,1:2),W1,W2,m,n,k);
+    [D1,D2] = createD1D2(o1,o2,m,k);
+    W22 = W2(1:k,1:m);
+    e = o2 - (expected);
+    
+    delta2 = D2*transpose(e);
+    delta1 = D1*W22*delta2;
+    
+    dW2T = -0.1*delta2*add1(o1);
+    dW1T = -0.1*delta1*add1(currentLine(1,1:2));
+
+    W1 = W1 + transpose(dW1T);
+    W2 = W2 + transpose(dW2T);
+endfor
+
+for i = 1:lines
+  currentLine = trainData(i,:);
+  [o1,o2] = net(currentLine(1,1:2),W1,W2,m,n,k);
+  expected = currentLine(1,3);
+  predicted = round(o2);
+  fprintf("%d. expected %d      predicted %d\n", i , expected, predicted);
+endfor 
+
+\end{lstlisting}
+
+ \section*{Aufgabe 2}
+ 	Normieren zunächst alle Punkte mit der
+ 	Länge des längsten Punktvektors.
+ 	\\
+ 	Wandeln Digits in Vektoren um:\\ $0 = [1,0,0,0,0,0,0,0,0,0]\\1 = [0,1,0,0,0,0,0,0,0,0]\\...\\9 = [0,0,0,0,0,0,0,0,0,1]$\\
+	und trainieren dann das Netz für $k = 2,4,8$.\\
+	Wählen als Schrittweite $-1$, iterieren $4$ mal über den Trainingsdatensatz.
+	\subsection*{k=8}
+		Erkennungsrate = $0.91193$\\
+		\begin{tabular}{||l|l|l|l|l|l|l|l|l|l|l|}
+		 \hline 
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline \hline
+			0 & 738   &  5  &   0  &   0 &   13    & 5 &    1  &   1&    16 &     1\\ \hline
+			1 &0&   693  &  18 &   35  &   4   &  0  &  11  &  10 &    0 &    8\\ \hline
+			2 &0 &   29  & 701   &  0 &    3  &   0   &  0 &   47   &  0 &    0\\ \hline
+			3 &0   &   3 &     2&    713 &     0&      0 &     0&      1 &     0 &     0\\ \hline
+			4 &0    & 0&     1   &  1&   776  &   0  &   0   &  0   &  0    & 2\\ \hline
+			5 &3 &    0  &   1 &  118 &   38 &  459 &   20 &    0 &    0  &  81\\ \hline
+			6 &  1  &   0  &   0 &    2 &    2 &    1  & 713  &   0  &   1  &   0\\ \hline
+			7 &0  &  62 &   12   &  3 &    5  &   0 &    0  & 693 &    1  &   2\\ \hline
+			8 &13   &  13  &    0  &    0  &    0   &   4  &    0  &    9  &  680 &     0\\ \hline
+			9 & 0&   40 &    1     & 6 &    2  &   1 &    0 &    0 &    1 &  668\\ \hline
+		\end{tabular}
+		
+		\subsection*{k=4}
+		Erkennungsrate = $0.86816$\\
+		\begin{tabular}{||l|l|l|l|l|l|l|l|l|l|l|}
+		 \hline 
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline \hline
+			0 & 720    &  0 &     0    &  0   &   5   &   5  &    2  &    0   &  43  &    5\\ \hline
+			1 &  0  &  617   &  60  &   22  &    2  &    0   &   2   &  25  &   22   &  29\\ \hline
+			2 &0    & 67  &  663   &   1  &    0   &   0  &    0    & 49   &   0   &   0\\ \hline
+			3 &0  &   17   &   2  &  686    &  0  &    0   &   9  &    1   &   0  &    4\\ \hline
+			4 &3   &   2   &   1  &    6  &  747  &    0   &   1   &   0   &   0   &  20\\ \hline
+			5 &1   &   1  &    0   &  79   &   0   & 449  &   16   &   0   &  26  &  148\\ \hline
+			6 & 0  &    0    &  0   &   0  &    1  &    1  &  716   &   0   &   2  &    0\\ \hline
+			7 &0   &  86   &   0    &  0    &  0  &    1  &   34  &  645   &   5  &    7\\ \hline
+			8 & 31  &    3   &   0  &    0   &   0  &    5 &    27   &  26  &  612  &   15\\ \hline
+			9 &  0   &  18  &    0    & 14  &   10   &  10     & 0   &   0   &  16  &  651\\ \hline
+		\end{tabular}
+		
+		\subsection*{k=2}
+		Erkennungsrate = $0.66026$\\
+		\begin{tabular}{||l|l|l|l|l|l|l|l|l|l|l|}
+		 \hline 
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline \hline
+			0 & 757  &   0    & 0 &    0  &   5  &  12  &   0   &  0  &   3 &    3\\ \hline
+			1 & 0 &  620&   108  &  21   &  0 &    0   & 10 &   18   &  0&     2\\ \hline
+			2 & 0  &  52 &  711  &   0 &    0  &   0  &   0 &   17 &    0  &   0\\ \hline
+			3 & 0  &  99   &  1 &  559 &   40 &    0  &   0  &  20  &   0 &    0\\ \hline
+			4 & 109 &    1   &  0  &  44 &  337  &  45 &    8 &   14&     0 &  222\\ \hline
+			5 & 92  &   9   &  0 &  139  &  71  & 307&    46  &  12  &  43 &    1\\ \hline
+			6 & 1 &    0 &    0 &    0   &  0 &   11  & 708&     0 &    0  &   0\\ \hline
+			7 & 1  & 101  &  15 &  185 &    6 &   23&    52 &  392 &    0 &    3\\ \hline
+			8 &  259  &  24&     0  &  23  &  67  & 246&    51&     2  &  34 &   13\\ \hline
+			9 & 14 &   59 &    0  &   1 &  122  &   0  &   0  &   0  &   0  & 523\\ \hline
+		\end{tabular}
+		
+		\subsection*{Code}
+		\begin{lstlisting}
+0;
+%macht [a,b,c] zu [a,b,c,1]
+function e = add1(o)
+  [h,w] = size(o);
+  e = ones(h,w + 1);
+  e(1,1:w) = o(1:w);  
+endfunction
+
+function s = sig(x)
+  s = 1.0/(1.0  + exp(-x));
+endfunction
+
+
+function [W1,W2] = createRanwomW1W2(m,n,k)
+  W1 = rand(n + 1,k);
+  W2 = rand(k + 1,m);
+endfunction
+
+function [D1,D2] = createD1D2(o1,o2,m,k)
+  D1 = zeros(k,k);
+  l = 1;
+  for x = 1:k
+    D1(x,x) = o1(1,x) * (1-o1(1,x));
+  endfor
+
+  D2 = zeros(m,m);
+
+  for x = 1:m
+    D2(x,x) = o2(1,x) * (1 - o2(1,x));
+  endfor
+endfunction
+
+function [r1,r2] = net(input, W1, W2, m, n , k)
+  ot = add1(input);
+  o11 = ot * W1;
+
+  o1 = o11;
+  for i = 1:k
+    o1(1,i) = sig(o11(1,i));
+  endfor
+  
+  o2 = add1(o1) * W2;
+  for i = 1:m
+    o2(1,i) = sig(o2(1,i));
+  endfor
+  r1 = o1;
+  r2 = o2;
+endfunction
+
+function n = numToOutput(i)
+  n = zeros(1,10);
+  n(1,i+1) = 1;
+endfunction
+
+function n = outputToNum(o2)
+  [x,y] = max(o2);
+  n = y-1;
+endfunction
+
+function n = normDigit(d)
+  points = zeros(8,2);
+  points(1,:) = d(1,1:2);
+  points(2,:) = d(1,3:4);
+  points(3,:) = d(1,5:6);
+  points(4,:) = d(1,7:8);
+  points(5,:) = d(1,9:10);
+  points(6,:) = d(1,11:12);
+  points(7,:) = d(1,13:14);
+  points(8,:) = d(1,15:16);
+  m = norm(points(1,:));
+  maxIndex = 1;
+  for i = 1: size(points,1)
+    if norm(points(i,:)) > m
+      maxIndex = i;
+      m = norm(points(i,:));
+    endif
+  endfor
+  
+  n = d / m;
+endfunction
+
+
+data = load("/home/alex/fu_mustererkennung_sose2015/zettel09/pendigits-training.txt");
+testData = load("/home/alex/fu_mustererkennung_sose2015/zettel09/pendigits-training.txt");
+lines = size(data,1)
+
+n = 16; %input
+k = 2; %hiddeen units
+m = 10; %output units
+
+
+
+[W1,W2] = createRanwomW1W2(m,n,k)
+for foo = 1:4
+  for i = 1:lines
+    currentLine = data(i,:);
+    expected = currentLine(1,17);
+    input = normDigit(currentLine(1,1:16));
+    [o1,o2] = net(input,W1,W2,m,n,k);
+    [D1,D2] = createD1D2(o1,o2,m,k);
+    W22 = W2(1:k,1:m);
+    e = o2 - numToOutput(expected);
+    
+    delta2 = D2*transpose(e);
+    delta1 = D1*W22*delta2;
+    
+    dW2T = -1*delta2*add1(o1);
+    dW1T = -1*delta1*add1(input);
+
+    W1 = W1 + transpose(dW1T);
+    W2 = W2 + transpose(dW2T);
+  endfor
+endfor
+
+lines = size(testData,1);
+good = 0;
+mat = zeros(10,10);
+for i = 1:lines
+  currentLine = testData(i,:);
+  [o1,o2] = net(normDigit(currentLine(1,1:16)),W1,W2,m,n,k);
+  expected = currentLine(1,17);
+  
+  %fprintf("%d. expected %d      predicted %d\n", i , expected, outputToNum(o2));
+  if expected == outputToNum(o2)
+    good += 1;
+  endif
+  mat(expected+1 , outputToNum(o2)+1) += 1;
+endfor
+k
+mat
+good / lines
+		\end{lstlisting}
+		
+\end{document}
