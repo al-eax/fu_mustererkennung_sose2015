@@ -1,5 +1,4 @@
 0;
-
 points = zeros(10000,3);
 [h,w] = size(points);
 

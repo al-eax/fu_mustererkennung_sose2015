@@ -100,7 +100,7 @@ lines = size(data,1);
 n = 16; %input
 k = 16; %hidden units
 m = 10; %output units
-lernkonstante = -1;
+lernkonstante = 1;
 
 %Netz trainieren
 [W1,W2] = createRanwomW1W2(m,n,k);
@@ -119,8 +119,8 @@ for foo = 1:u
     delta2 = D2*transpose(e);
     delta1 = D1*W22*delta2;
     
-    dW2T = lernkonstante*delta2*add1(o1);
-    dW1T = lernkonstante*delta1*add1(input);
+    dW2T = -lernkonstante*delta2*add1(o1);
+    dW1T = -lernkonstante*delta1*add1(input);
 
     W1 = W1 + transpose(dW1T);
     W2 = W2 + transpose(dW2T);
