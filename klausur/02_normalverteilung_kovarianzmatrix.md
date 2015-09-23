@@ -11,3 +11,5 @@ Man geht davon aus, dass sich die Eigenschaften neuer Objekte nach der Normalver
 Hat man nun zwei Klassen, kann man für jede Klasse eine neue Normalverteilungsfunktion berechnen.
 
 ## multivariate Normalverteilung für mehrere Merkmake (mehrdimensional)
+
+__TODO__ fertig machen

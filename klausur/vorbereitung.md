@@ -2,20 +2,19 @@
 
 ## Themen der Zettel
 __1. Zettel__
-* Naiver Bayes-Klassifikator, a­priori ­Wahrscheinlichkeit
+* Naiver Bayes-Klassifikator, a­priori ­Wahrscheinlichkeit DONE
 * likelihood
-* evidence
-* a­posteriori­Wahrscheinlichkeit
+* evidence DONE
+* a­posteriori ­Wahrscheinlichkeit DONE
 
 __2. Zettel__
-* K­NN­-Algorithmus
-* Normalverteilung
+* K­NN­-Algorithmus DONE
+* 1 dimensionale Normalverteilung DONE
 
 __3. Zettel__
-* multivariante Normalverteilung
-* Bayes-Klassifikator
+* multivariante Normalverteilung / Bayes-Klassifikator
 * PCA(Hauptkomponentenanalyse) / Dimensionsreduktion
-* k-Means / Expectation ­Maximization
+* k-Means / Expectation ­Maximization DONE
 
 __4. Zettel__
 * lineare Regression
@@ -42,8 +41,10 @@ __10. Zettel__
 * ​batch­-Backpropagation
 * Rprop-­Methode
 
+__sonstiges__
+
+
 ## Anforderungen in der Klausur
 * Defonition der Methoden, Formeln, Berechnung
 * Benennung der Variablen & deren Funkgtion
 * Pseudocode
-*
