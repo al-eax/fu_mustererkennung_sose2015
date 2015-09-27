@@ -26,3 +26,17 @@ wird ein neues Koordinatensystem erstellt, die Daten werden in dieses neue Koord
 
 Jetzt lässt sich einfach abrechnen, auf welcher Achse die Daten am wenigsten streuen.
 Diese Achse wird dann weggelassen, damit verlieren die Daten eine Dimension.
+
+## Mathematische Berechnung
+
+* [Gutes Skript](ftp://ftp.ifn-magdeburg.de/pub/MBLehre/sv06_130509-ftp.pdf)
+
+Berechne Erwartungsvektor der Daten. Subtrahiere dann von jedem Vektor den Erwartungsvektor.
+
+So erhält man eine neue Datenmenge, die im Erwartungsvektor zentriert ist und den Nullvektor als Erwartungsvektor hat.
+
+Berechne Kovarianzmatrix $C$ vom neuen Datensatz.
+Wenn Kovarianzmatrix matrix $ n \times n $  ist, so besitzt sie $n$ Eigenvektoren
+mit Eigenwerten. Eigenvektoren stehen orthogonal zueinander.
+
+Sei $D$ Matrix, wobei Eigenwerte auf der Diagonalen liegen und absteigend sortiert sind, rest ist 0.

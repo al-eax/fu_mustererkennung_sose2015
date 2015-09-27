@@ -1,0 +1,1 @@
+# Schnitte von Gaußkurven
