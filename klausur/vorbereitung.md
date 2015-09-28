@@ -3,7 +3,7 @@
 ## Themen der Zettel
 __1. Zettel__
 * Naiver Bayes-Klassifikator, a­priori ­Wahrscheinlichkeit __DONE__
-* likelihood
+* likeli hood = Wahrscheinlichkeit ?!? __DONE__
 * evidence __DONE__
 * a­posteriori ­Wahrscheinlichkeit __DONE__
 
@@ -20,8 +20,8 @@ __4. Zettel__
 * lineare Regression __DONE__
 
 __5. Zettel__
-* Schnitte von Gauskurven
-* Fisher-Diskriminante mit Binärbäumen
+* Schnitte von Gauskurven __DONE__
+* Fisher-Diskriminante mit Binärbäumen __DONE__
 
 __6. Zettel__
 * Perzeptron Lernalgorithmus
@@ -42,7 +42,6 @@ __10. Zettel__
 * Rprop-­Methode
 
 __sonstiges__
-
 
 
 ## Anforderungen in der Klausur
