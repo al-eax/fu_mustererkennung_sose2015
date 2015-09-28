@@ -24,10 +24,10 @@ __5. Zettel__
 * Fisher-Diskriminante mit Binärbäumen __DONE__
 
 __6. Zettel__
-* Perzeptron Lernalgorithmus
+* Perzeptron Lernalgorithmus __DONE__
 
 __7. Zettel__
-* logistische Regression
+* logistische Regression __DONE__
 * Gradientenabstieg, Regressionskoeffizienten
 
 __8. Zettel__
@@ -48,9 +48,3 @@ __sonstiges__
 * Defonition der Methoden, Formeln, Berechnung
 * Benennung der Variablen & deren Funkgtion
 * Pseudocode
-
-
-
-Pädophilie ist ein fortlaufendes Thema auf dem Album.
-
-Nico deutet mehrfach an, dass er Sex mit Minderjährigen bevorzugt und hat:

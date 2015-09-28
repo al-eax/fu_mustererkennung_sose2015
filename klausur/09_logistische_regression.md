@@ -13,14 +13,15 @@ $\beta$ bekommt anfangs einen festen Wert: $(0,0)^T$. Dann wird iterativ $\beta$
 
 __Berechnung von neuem $\beta$__
 $Schrittweite$ muss gegeben sein (z.B. $10^{-7}$)
-berechne $\Delta  l(\beta) = \sum( x_i(y_i - p(x,\beta) )$. Daten stammen aus Trainingsdatensatz, $x_i$ ist Merkmal, $y_i$ ist Klasse $0 oder1$.
+berechne $\Delta  l(\beta) = \sum( x_i(y_i - p(x,\beta) )$. Daten stammen aus Trainingsdatensatz, $x_i$ ist Merkmal, $y_i$ ist Klasse 1 oder 0.
 Jetzt $\beta$ optimieren: $new\beta = \beta + Schrittweite * \Delta  l(\beta) $
 
 Diese Berechnung wird mehrmals widerholt (z.B. 100000 mal)
-__Musterlösung__
+
+__Musterlösung Code__
 ```
 data = dlmread('fieldgoal.txt');
-X = [ones(size(data,1),1) data(:,1)];
+X = [ones(size(data,1),1) data(:,1)]; % Meter
 y = data(:,2); % Klassifizierte Werte
 beta = zeros(2,1); %Startwert für Beta = (0,0)
 
@@ -31,10 +32,12 @@ for i=1:100000 %Anzahl der Iterationen um gutes beta zu finden.
 
   delta = X'*(y-p_x_beta); % Berechne deltaL(x,beta)
   beta = beta + (10e-7)*delta; % optimiere Beta
+
+
 endfor
 
-%jetzt final beta berechnen
 t=X*beta;
+%p_x_beta = 1./(1.+exp(-t));
 p_x_beta = exp(t)./(1.+exp(t));
 delta = X'*(y-p_x_beta);
 sum(abs(y-p_x_beta))

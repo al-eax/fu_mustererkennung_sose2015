@@ -1,13 +1,16 @@
-# lineare Regression
+# lineare Regression Schätzung des Regressionskoeffizienten
 
 ## Aus Tutorial von Rojas
 Haben mehrdimensional Daten (z.B. 3D) wollen, diese linear aproximieren.
 
+Spalten Trainingsdaten auf in Merkmal $y$, das später vorhergesagt ewrden soll. $X$  restliche Merkmale, anhand derer vorhergesagt werden soll.
+
 $y = X*\phi + e$
 
-$y$ ist der vorherzusagende Wert, $X$ sind die vorhandenen Daten (Datenmatrix), wobei in
+$y$ ist der vorherzusagende Wert, $X$ sind die vorhandenen Daten, also das neue Objekt, das vorhergesagt werden soll , wobei in
 der ersten Spalte nur $1$ vorkommt.
-$\phi$ ist beinhaltet die Werte der linearen Aproximation.
+$\phi$ ist ein Vektor, der durch die Trainingsdaten errechnet wird.
+$e$ ist Fehlerwert, wird hier vernachlässigt.
 
 __Berechnung von $\phi$:__
 
