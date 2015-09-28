@@ -16,6 +16,11 @@ Gewichtsvektor wird Anfangs auf $(0,0)^T$ gesetzt.
 Man muss sich festlegen, ob das Perzeptron klassifizieren soll, dann muss
 ein Schwellwert $\theta$ definiert werden, oder ob es z.B. ganze Zahlen ausgeben soll.
 
+
+## Aktivierungsfunktion
+Die [Aktivierungsfunktion](https://de.wikipedia.org/wiki/K%C3%BCnstliches_Neuron#Aktivierungsfunktionen) beschreibt, wie sich das Perzeptron verhält, bzw was es als Ergebnis ausgibt.
+In unserem Beispiel wird die Schwellwertfunktion verwendet, um zu klassifizieren.
+
 ## Lernalgorithmus
 
 Wir behandeln die Klassifizierung.

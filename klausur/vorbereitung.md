@@ -31,7 +31,7 @@ __7. Zettel__
 * Gradientenabstieg, Regressionskoeffizienten
 
 __8. Zettel__
-* Perzeptron als boolsche Funktion
+* Perzeptron als boolsche Funktion __DONE__
 
 __9. Zettel__
 * Neuronales Netz
@@ -42,7 +42,7 @@ __10. Zettel__
 * Rprop-­Methode
 
 __sonstiges__
-
+* subsetselection
 
 ## Anforderungen in der Klausur
 * Defonition der Methoden, Formeln, Berechnung
